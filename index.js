@@ -4,7 +4,7 @@ const http = require("http");
 const mongoose = require("mongoose");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = parseInt(process.env.PORT,10) || 3000;
 var server = http.createServer(app);
 const Room = require("./models/room");
 var io = require("socket.io")(server);
@@ -159,6 +159,6 @@ mongoose
     console.log(e);
   });
 
-server.listen(port, "192.168.31.56", () => {
+server.listen(port, () => {
   console.log(`Server started and running on port ${port}`);
 });
