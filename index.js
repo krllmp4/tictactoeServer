@@ -13,6 +13,14 @@ var io = require("socket.io")(server);
 app.use(express.json());
 
 const DB = "mongodb+srv://krll:kir010404@krllcluster.knfsx5v.mongodb.net/?retryWrites=true&w=majority";
+function generateRoomCode() {
+  const min = 1000; // Minimum value of the room code
+  const max = 9999; // Maximum value of the room code
+
+  const roomCode = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  return roomCode.toString();
+}
 
 io.on("connection", (socket) => {
   console.log("connected!");
@@ -31,7 +39,7 @@ io.on("connection", (socket) => {
       room.turn = player;
       room = await room.save();
       console.log(room);
-      const roomId = room._id.toString();
+      const roomId = generateRoomCode();
 
       socket.join(roomId);
       io.to(roomId).emit("createRoomSuccess", room);
