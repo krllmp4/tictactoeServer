@@ -133,6 +133,7 @@ io.on("connection", (socket) => {
       console.log('revenge');
       let room = await Room.findById(roomId);
       room.isJoin = true;
+      room.currentRound = 1;
       room.players.forEach((player) => {
         player.points = 0;
       });
@@ -148,7 +149,6 @@ io.on("connection", (socket) => {
     try {
       console.log('exit');
       let room = await Room.findById(roomId);
-      Room.deleteOne
       await Room.deleteOne({ _id: roomId });
       console.log(room);
       io.to(roomId).emit("gameExited", room);
