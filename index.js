@@ -25,7 +25,6 @@ function generateRoomCode() {
 
 io.on("connection", (socket) => {
   console.log("connected!");
-
   socket.on("createRoom", async ({ nickname }) => {
     try {
       console.log('nickname is '+nickname);
@@ -41,7 +40,7 @@ io.on("connection", (socket) => {
       room = await room.save();
       console.log(room);
       const roomId = room._id.toString();
-     //const roomId = generateRoomCode();
+      //const roomId = generateRoomCode();
 
       socket.join(roomId);
       io.to(roomId).emit("createRoomSuccess", room);
