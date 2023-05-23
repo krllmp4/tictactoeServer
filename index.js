@@ -7,6 +7,7 @@ const app = express();
 const port = parseInt(process.env.PORT,10) || 3000;
 var server = http.createServer(app);
 const Room = require("./models/room");
+const { log } = require("console");
 var io = require("socket.io")(server);
 
 // Middleware
@@ -132,15 +133,30 @@ io.on("connection", (socket) => {
     try {
       console.log('revenge');
       let room = await Room.findById(roomId);
-      room.isJoin = true;
+      console.log('roomID is '+ roomId);
       room.currentRound = 1;
-      room.players.forEach((player) => {
-        player.points = 0;
-      });
-      room = await room.save();
 
+        console.log(room.players[0].points);
+        console.log(room.players[1].points);
+
+      room.players[0].points=0;
+      room.players[1].points=0;
+
+        console.log(room.players[0].points);
+        console.log(room.players[1].points);
+      
+      room = await room.save();
       io.to(roomId).emit("revenged", room);
-      io.to(roomId).emit("pointsClear", player);
+
+        console.log('player revenge');
+
+        console.log(room.players[0].nickname);
+        console.log(room.players[1].nickname);
+
+      io.to(roomId).emit("pointsClear1", room.players[0]);
+      io.to(roomId).emit("pointsClear2", room.players[1]);
+
+        console.log('pointsclear');
     } catch (e) {
       console.log(e);
     }
@@ -151,8 +167,9 @@ io.on("connection", (socket) => {
       console.log('exit');
       let room = await Room.findById(roomId);
       await Room.deleteOne({ _id: roomId });
+      socket.leave(roomId);
       console.log(room);
-      io.to(roomId).emit("gameExited", room);
+      io.to(roomId).emit("clearGameData", room);
     } catch (e) {
       console.log(e);
     }
