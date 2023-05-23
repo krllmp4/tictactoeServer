@@ -41,7 +41,7 @@ roomSchema.pre("save", async function (next) {
   const exists = await this.constructor.exists({ roomID });
 
   if (exists) {
-    return this.pre("save", next);
+    return this.save(next); // Use this.save() instead of this.pre("save", next)
   }
   
   this.roomID = roomID;
