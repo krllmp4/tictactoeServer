@@ -14,15 +14,6 @@ var io = require("socket.io")(server);
 app.use(express.json());
 
 const DB = "mongodb+srv://krll:kir010404@krllcluster.knfsx5v.mongodb.net/?retryWrites=true&w=majority";
-function generateRoomCode() {
-  const min = 1000; // Minimum value of the room code
-  const max = 9999; // Maximum value of the room code
-
-  const roomCode = Math.floor(Math.random() * (max - min + 1)) + min;
-
-  return roomCode.toString();
-}
-
 io.on("connection", (socket) => {
   console.log("connected!");
   socket.on("createRoom", async ({ nickname }) => {
@@ -51,7 +42,7 @@ io.on("connection", (socket) => {
 
   socket.on("joinRoom", async ({ nickname, roomId }) => {
     try {
-      if (!roomId.match(/^[0-9a-fA-F]{24}$/)) {
+      if (!(roomId >= 1000 && roomId <= 9999)) {
         socket.emit("errorOccurred", "Please enter a valid room ID.");
         return;
       }
