@@ -140,6 +140,7 @@ io.on("connection", (socket) => {
       room = await room.save();
 
       io.to(roomId).emit("revenged", room);
+      io.to(roomId).emit("pointsClear", player);
     } catch (e) {
       console.log(e);
     }
