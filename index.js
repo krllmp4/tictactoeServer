@@ -30,7 +30,6 @@ io.on("connection", (socket) => {
       room.turn = player;
       room = await room.save();
       console.log(room);
-      room._id = generateRoomCode();
       const roomId = room._id.toString();
       socket.join(roomId);
       io.to(roomId).emit("createRoomSuccess", room);
